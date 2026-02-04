@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Genómico Interactivo - E. coli</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #050012, #000);
+            color: #e0e0ff;
+            font-family: "Segoe UI", sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border-bottom: 2px solid #00f0ff;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 0 0 15px #00f0ff;
+            color: #00f0ff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7df9ff;
+            font-size: 1.1em;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #00f0ff33;
+            padding-bottom: 15px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(10, 10, 40, 0.6);
+            border: 1px solid #00f0ff;
+            color: #00f0ff;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab-btn:hover {
+            background: #00f0ff22;
+            transform: translateY(-3px);
+        }
+
+        .tab-btn.active {
+            background: #00f0ff;
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .card {
+            background: rgba(10, 10, 40, 0.8);
+            border: 1px solid #00f0ff;
+            box-shadow: 0 0 20px #00f0ff55;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 45px #00f0ffcc;
+        }
+
+        .card h2 {
+            color: #00f0ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px #00f0ff;
+        }
+
+        .stat-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00f0ff;
+        }
+
+        .stat-label {
+            color: #7df9ff;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #00f0ff;
+            font-weight: bold;
+        }
+
+        /* SELECTORS */
+        select {
+            padding: 12px 16px;
+            background: rgba(10, 10, 40, 0.9);
+            border: 2px solid #00f0ff;
+            border-radius: 8px;
+            color: #e0e0ff;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 15px #00f0ff;
+        }
+
+        .selector-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .selector-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comparar-btn {
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #00f0ff, #7df9ff);
+            border: none;
+            color: #000;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .comparar-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
+        /* TABLA INTERACTIVA */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #00f0ff33;
+        }
+
+        th {
+            background: #00f0ff22;
+            color: #00f0ff;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #00f0ff11;
+        }
+
+        /* COMPARATIVA LADO A LADO */
+        .comparativa-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .genoma-card {
+            background: rgba(0, 240, 255, 0.08);
+            border: 2px solid #00f0ff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .genoma-titulo {
+            color: #00f0ff;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00f0ff33;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #00f0ff22;
+        }
+
+        .stat-row strong {
+            color: #7df9ff;
+        }
+
+        /* DIFERENCIAS */
+        .diferencias-container {
+            margin-top: 30px;
+        }
+
+        .diferencia-item {
+            background: rgba(10, 40, 40, 0.5);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .diferencia-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .codon-badge {
+            background: #00f0ff;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .diferencia-valor {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .valor-genoma {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid #00f0ff33;
+        }
+
+        .valor-genoma strong {
+            color: #7df9ff;
+        }
+
+        .flecha-diferencia {
+            color: #ff6b6b;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: #7df9ff;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* GRÁFICOS */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #00f0ff;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* DETALLES GEN */
+        .gen-detalle {
+            background: rgba(0, 240, 255, 0.08);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: 1px solid #00f0ff33;
+        }
+
+        .gen-titulo {
+            color: #00f0ff;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00f0ff33;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .comparativa-container { grid-template-columns: 1fr; }
+            .selector-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🧬 Análisis Genómico Interactivo</h1>
+        <p class="subtitle"><i>Escherichia coli</i> - Exploración detallada y comparativa de genomas</p>
+    </header>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('resumen')">📊 Resumen General</button>
+        <button class="tab-btn" onclick="switchTab('genes')">🧬 Genes Detallados</button>
+        <button class="tab-btn" onclick="switchTab('compactacion')">📦 Compactación Génica</button>
+        <button class="tab-btn" onclick="switchTab('espacios')">🚫 Espacios Basura</button>
+        <button class="tab-btn" onclick="switchTab('comparativa')">⚖️ Comparativa Interactiva</button>
+        <button class="tab-btn" onclick="switchTab('codones')">🔬 Análisis Codones</button>
+    </div>
+
+    <!-- TAB: COMPARATIVA INTERACTIVA -->
+    <div id="comparativa" class="tab-content">
+        <div class="card">
+            <h2>⚖️ Comparativa Interactiva de Genomas</h2>
+            <p style="margin-bottom: 20px; color: #7df9ff;">
+                Selecciona 2 cepas de E. coli y verás EXACTAMENTE dónde difieren a nivel codon
+            </p>
+
+            <div class="selector-container">
+                <div class="selector-item">
+                    <label style="color: #7df9ff; font-weight: bold;">Genoma 1:</label>
+                    <select id="genoma1-select">
+                        <option value="">Cargando genomas...</option>
+                    </select>
+                </div>
+
+                <div style="color: #00f0ff; font-size: 2em; font-weight: bold;">↔</div>
+
+                <div class="selector-item">
+                    <label style="color: #7df9ff; font-weight: bold;">Genoma 2:</label>
+                    <select id="genoma2-select">
+                        <option value="">Cargando genomas...</option>
+                    </select>
+                </div>
+
+                <button class="comparar-btn" onclick="compararGenomas()">🔍 COMPARAR</button>
+            </div>
+
+            <div id="comparativa-loading" class="loading" style="display: none;">
+                ⏳ Analizando genomas y calculando diferencias...
+            </div>
+
+            <div id="comparativa-result" style="display: none;">
+                <!-- RESUMEN DE DIFERENCIAS -->
+                <div style="background: rgba(255, 107, 107, 0.1); border: 2px solid #ff6b6b; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="color: #ff6b6b; margin-bottom: 15px;">📊 Resumen de Diferencias</h3>
+                    <div id="resumen-diferencias"></div>
+                </div>
+
+                <!-- GENOMAS LADO A LADO -->
+                <h3 style="color: #00f0ff; margin: 25px 0 15px 0;">📋 Información de Genomas</h3>
+                <div class="comparativa-container" id="genomas-info"></div>
+
+                <!-- DIFERENCIAS CODON POR CODON -->
+                <div class="diferencias-container">
+                    <h3 style="color: #00f0ff; margin: 25px 0 15px 0;">🧬 Top 30 Diferencias en Codones</h3>
+                    <p style="color: #7df9ff; margin-bottom: 15px;">
+                        Mostrando los codones que más varían entre las 2 cepas seleccionadas
+                    </p>
+                    <div id="diferencias-codones"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: RESUMEN GENERAL -->
+    <div id="resumen" class="tab-content active">
+        <div class="card">
+            <h2>📊 Información General del Genoma</h2>
+            <div class="stat-box">
+                <div class="stat-item">
+                    <div class="stat-label">Longitud Total del Genoma</div>
+                    <div class="stat-value" id="genome-length">{{ genome_length }}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Contenido GC</div>
+                    <div class="stat-value" id="gc-content">{{ "%.2f"|format(gc) }}%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total de Genes (CDS)</div>
+                    <div class="stat-value" id="total-genes">{{ num_genes }}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Densidad Génica</div>
+                    <div class="stat-value" id="gene-density">{{ "%.2f"|format(gene_density) }} genes/Mb</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏆 Genes Extremos</h2>
+            <div class="stat-box">
+                <div class="stat-item">
+                    <div class="stat-label">Gen más GRANDE</div>
+                    <div class="stat-value" style="color: #ff6b6b;">{{ gen_mas_grande.gen }}</div>
+                    <p style="color: #7df9ff; margin-top: 8px;"><strong>Producto:</strong> {{ gen_mas_grande.producto }}</p>
+                    <p style="color: #7df9ff;"><strong>Longitud:</strong> {{ gen_mas_grande.longitud }} pb</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Gen más PEQUEÑO</div>
+                    <div class="stat-value" style="color: #7df9ff;">{{ gen_mas_pequeno.gen }}</div>
+                    <p style="color: #7df9ff; margin-top: 8px;"><strong>Producto:</strong> {{ gen_mas_pequeno.producto }}</p>
+                    <p style="color: #7df9ff;"><strong>Longitud:</strong> {{ gen_mas_pequeno.longitud }} pb</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📈 Top 15 Genes más Grandes</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rango</th>
+                            <th>Gen</th>
+                            <th>Producto</th>
+                            <th>Longitud (pb)</th>
+                            <th>Contenido GC (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set counter = [0] %}
+                        {% for gen in top_genes %}
+                            {% if counter.append(counter.pop() + 1) %}{% endif %}
+                        <tr>
+                            <td><span class="badge">{{ counter[0] }}</span></td>
+                            <td><strong>{{ gen.gen }}</strong></td>
+                            <td>{{ gen.producto[:50] }}</td>
+                            <td>{{ gen.longitud }}</td>
+                            <td>{{ "%.2f"|format(gen.gc_gen) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: GENES DETALLADOS -->
+    <div id="genes" class="tab-content">
+        <div class="card">
+            <h2>🔍 Explorador de Genes</h2>
+            <input type="text" class="search-box" id="search-genes" placeholder="Buscar gen por nombre o producto..." onkeyup="buscarGenes()" style="padding: 12px 16px; background: rgba(10, 10, 40, 0.9); border: 1px solid #00f0ff; border-radius: 8px; color: #e0e0ff; margin-bottom: 20px; font-size: 1em; width: 100%;">
+            <div id="genes-results" class="loading">Cargando genes...</div>
+        </div>
+    </div>
+
+    <!-- MODAL para detalles de gen -->
+    <div id="genModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; overflow-y: auto;">
+        <div style="background: rgba(10,10,40,0.95); margin: 20px auto; max-width: 900px; padding: 30px; border-radius: 14px; border: 1px solid #00f0ff;">
+            <button onclick="cerrarModal()" style="float: right; background: #ff6b6b; border: none; color: white; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">✕ Cerrar</button>
+            <div id="genModalContent"></div>
+        </div>
+    </div>
+
+    <!-- TAB: COMPACTACIÓN -->
+    <div id="compactacion" class="tab-content">
+        <div class="card">
+            <h2>📦 Compactación Génica</h2>
+            <div class="stat-box">
+                <div class="stat-item">
+                    <div class="stat-label">Porcentaje Codificante</div>
+                    <div class="stat-value" style="color: #7df9ff;">{{ "%.2f"|format(compactacion.porcentaje_compactacion) }}%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Longitud Codificante</div>
+                    <div class="stat-value">{{ compactacion.longitud_codificante }} pb</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Secuencias No Codificantes</div>
+                    <div class="stat-value">{{ compactacion.longitud_total - compactacion.longitud_codificante }} pb</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: ESPACIOS BASURA -->
+    <div id="espacios" class="tab-content">
+        <div class="card">
+            <h2>🚫 Espacios Intergénicos (DNA Basura)</h2>
+            <h3 style="color: #00f0ff; margin: 20px 0;">Top 15 Espacios más Grandes</h3>
+            {% for espacio in espacios %}
+            <div class="diferencia-item">
+                <strong>{{ espacio.entre_genes }}</strong> | Posición: {{ espacio.posicion }}
+                <p style="margin-top: 8px; color: #e0e0ff;">
+                    <strong>Tamaño:</strong> {{ espacio.tamaño }} pb | 
+                    <strong>Contenido GC:</strong> {{ "%.2f"|format(espacio.contenido_gc) }}%
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- TAB: CODONES -->
+    <div id="codones" class="tab-content">
+        <div class="card">
+            <h2>🔬 Análisis de Codones</h2>
+            <div class="stat-box">
+                <div class="stat-item">
+                    <div class="stat-label">Codones de Terminación (TAA)</div>
+                    <div class="stat-value">{{ stop_codons.TAA }}</div>
+                    <p style="color: #7df9ff; margin-top: 8px;">{{ "%.2f"|format(stop_props.TAA) }}%</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Codones de Terminación (TAG)</div>
+                    <div class="stat-value">{{ stop_codons.TAG }}</div>
+                    <p style="color: #7df9ff; margin-top: 8px;">{{ "%.2f"|format(stop_props.TAG) }}%</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Codones de Terminación (TGA)</div>
+                    <div class="stat-value">{{ stop_codons.TGA }}</div>
+                    <p style="color: #7df9ff; margin-top: 8px;">{{ "%.2f"|format(stop_props.TGA) }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Cargar genomas disponibles al iniciar
+    async function cargarGenomosDisponibles() {
+        try {
+            const response = await fetch('/api/genomas-disponibles');
+            const data = await response.json();
+            
+            const select1 = document.getElementById('genoma1-select');
+            const select2 = document.getElementById('genoma2-select');
+            
+            select1.innerHTML = '';
+            select2.innerHTML = '';
+            
+            data.genomas.forEach((genoma, idx) => {
+                const opt1 = document.createElement('option');
+                opt1.value = genoma;
+                opt1.textContent = genoma;
+                select1.appendChild(opt1);
+                
+                const opt2 = document.createElement('option');
+                opt2.value = genoma;
+                opt2.textContent = genoma;
+                select2.appendChild(opt2);
+            });
+            
+            // Pre-seleccionar distintos por defecto
+            if (data.genomas.length >= 2) {
+                select1.value = data.genomas[0];
+                select2.value = data.genomas[1];
+            }
+        } catch (error) {
+            console.error('Error cargando genomas:', error);
+        }
+    }
+
+    async function compararGenomas() {
+        const genoma1 = document.getElementById('genoma1-select').value;
+        const genoma2 = document.getElementById('genoma2-select').value;
+        
+        if (!genoma1 || !genoma2) {
+            alert('Selecciona 2 genomas para comparar');
+            return;
+        }
+        
+        if (genoma1 === genoma2) {
+            alert('Selecciona 2 genomas diferentes');
+            return;
+        }
+        
+        document.getElementById('comparativa-loading').style.display = 'block';
+        document.getElementById('comparativa-result').style.display = 'none';
+        
+        try {
+            const response = await fetch(`/api/comparar-genomas?genoma1=${encodeURIComponent(genoma1)}&genoma2=${encodeURIComponent(genoma2)}`);
+            const data = await response.json();
+            
+            mostrarComparativa(data);
+            document.getElementById('comparativa-loading').style.display = 'none';
+            document.getElementById('comparativa-result').style.display = 'block';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al comparar genomas');
+        }
+    }
+
+    function mostrarComparativa(data) {
+        // Resumen de diferencias
+        const resumen = data.resumen_diferencias;
+        let resumenHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div style="background: rgba(0,240,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong style="color: #7df9ff;">Diferencia de Longitud:</strong><br>
+                    <span style="color: #00f0ff; font-size: 1.3em;">± ${resumen.diferencia_longitud.toLocaleString()} pb</span>
+                </div>
+                <div style="background: rgba(0,240,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong style="color: #7df9ff;">Diferencia de Genes:</strong><br>
+                    <span style="color: #00f0ff; font-size: 1.3em;">± ${resumen.diferencia_genes} genes</span>
+                </div>
+                <div style="background: rgba(0,240,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong style="color: #7df9ff;">Diferencia GC:</strong><br>
+                    <span style="color: #00f0ff; font-size: 1.3em;">± ${resumen.diferencia_gc.toFixed(2)}%</span>
+                </div>
+                <div style="background: rgba(0,240,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong style="color: #7df9ff;">Codones Diferentes:</strong><br>
+                    <span style="color: #00f0ff; font-size: 1.3em;">${resumen.codones_diferentes} de ${resumen.total_codones}</span>
+                </div>
+            </div>
+        `;
+        document.getElementById('resumen-diferencias').innerHTML = resumenHTML;
+
+        // Genomas lado a lado
+        let genomas_html = '';
+        
+        ['genoma1', 'genoma2'].forEach(key => {
+            const g = data[key];
+            genomas_html += `
+                <div class="genoma-card">
+                    <div class="genoma-titulo">🧬 ${g.nombre}</div>
+                    <div class="stat-row">
+                        <strong>Longitud:</strong>
+                        <span>${(g.longitud / 1_000_000).toFixed(2)} Mb</span>
+                    </div>
+                    <div class="stat-row">
+                        <strong>Genes:</strong>
+                        <span>${g.num_genes}</span>
+                    </div>
+                    <div class="stat-row">
+                        <strong>Contenido GC:</strong>
+                        <span>${g.gc.toFixed(2)}%</span>
+                    </div>
+                    <div class="stat-row">
+                        <strong>Compactación:</strong>
+                        <span>${g.compactacion.toFixed(2)}%</span>
+                    </div>
+                    <div class="stat-row">
+                        <strong>Densidad ATG:</strong>
+                        <span>${g.densidad_atg.toFixed(2)} por kb</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('genomas-info').innerHTML = genomas_html;
+
+        // Diferencias codon por codon
+        let diferencias_html = '';
+        
+        data.diferencias_codones.forEach((diff, idx) => {
+            const dir = diff.diferencia > 0 ? '↑' : '↓';
+            const color = diff.diferencia > 0 ? '#7df9ff' : '#ff9999';
+            
+            diferencias_html += `
+                <div class="diferencia-item">
+                    <div class="diferencia-header">
+                        <span class="codon-badge">${diff.codon}</span>
+                        <span style="color: ${color}; font-weight: bold; font-size: 1.2em;">${dir} ${Math.abs(diff.diferencia)}</span>
+                    </div>
+                    <div class="diferencia-valor">
+                        <div class="valor-genoma">
+                            <strong>${data.genoma1.nombre}:</strong> ${diff[data.genoma1.nombre]}
+                        </div>
+                        <span class="flecha-diferencia">→</span>
+                        <div class="valor-genoma">
+                            <strong>${data.genoma2.nombre}:</strong> ${diff[data.genoma2.nombre]}
+                        </div>
+                    </div>
+                    <p style="color: #7df9ff; font-size: 0.9em; margin-top: 8px;">
+                        Cambio: ${diff.porcentaje_diff.toFixed(1)}%
+                    </p>
+                </div>
+            `;
+        });
+        
+        document.getElementById('diferencias-codones').innerHTML = diferencias_html;
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(tabName).classList.add('active');
+        event.target.classList.add('active');
+
+        if (tabName === 'genes') {
+            buscarGenes();
+        } else if (tabName === 'comparativa') {
+            cargarGenomosDisponibles();
+        }
+    }
+
+    async function buscarGenes() {
+        const search = document.getElementById('search-genes')?.value || '';
+        try {
+            const response = await fetch(`/api/genes?search=${encodeURIComponent(search)}`);
+            const data = await response.json();
+
+            let html = `<div class="table-wrapper"><table>
+                <thead><tr><th>#</th><th>Gen</th><th>Producto</th><th>ID Proteína</th><th>Longitud (pb)</th><th>Acción</th></tr></thead>
+                <tbody>`;
+
+            data.genes.forEach((gen, idx) => {
+                html += `<tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${gen.gen}</strong></td>
+                    <td>${gen.producto.substring(0, 50)}</td>
+                    <td>${gen.id_proteina}</td>
+                    <td>${gen.longitud}</td>
+                    <td><button onclick="mostrarDetallesGen(${gen.id})" style="padding: 6px 12px; background: #00f0ff; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">👁 Ver</button></td>
+                </tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+            document.getElementById('genes-results').innerHTML = html;
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('genes-results').innerHTML = '<p style="color: #ff6b6b;">Error al cargar genes</p>';
+        }
+    }
+
+    async function mostrarDetallesGen(genId) {
+        try {
+            const response = await fetch(`/api/gen/${genId}`);
+            const data = await response.json();
+
+            let html = `
+                <div class="gen-detalle">
+                    <div class="gen-titulo">🧬 ${data.gen.gen}</div>
+                    <p><strong>Producto:</strong> ${data.gen.producto}</p>
+                    <p><strong>ID Proteína:</strong> ${data.gen.id_proteina}</p>
+                    <p><strong>Longitud Genómica:</strong> ${data.gen.longitud} pb</p>
+                    <p><strong>Contenido GC:</strong> ${data.gen.gc_gen.toFixed(2)}%</p>
+                    <p><strong>Posición:</strong> ${data.gen.inicio} - ${data.gen.fin}</p>
+                    
+                    <h3 style="color: #00f0ff; margin-top: 20px;">🧪 Síntesis de Proteína</h3>
+                    <p><strong>Secuencia de Proteína (${data.tamaño_proteina} aminoácidos):</strong></p>
+                    <p style="font-family: monospace; background: rgba(0,240,255,0.1); padding: 15px; border-radius: 5px; word-break: break-all; max-height: 200px; overflow-y: auto; border: 1px solid #00f0ff33;">
+                        ${data.proteina_sintesis}
+                    </p>
+
+                    <h3 style="color: #00f0ff; margin-top: 20px;">🔬 Top 12 Codones en este Gen</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+            `;
+
+            for (const [codon, count] of Object.entries(data.codones_frecuentes).slice(0, 12)) {
+                html += `<div style="background: rgba(125, 249, 255, 0.1); padding: 10px; border-radius: 6px; border: 1px solid #7df9ff; text-align: center;">
+                    <div style="color: #7df9ff; font-weight: bold; font-family: monospace;">${codon}</div>
+                    <div style="color: #00f0ff; font-size: 1.2em; margin-top: 5px;">${count}x</div>
+                </div>`;
+            }
+
+            html += `</div></div>`;
+
+            document.getElementById('genModalContent').innerHTML = html;
+            document.getElementById('genModal').style.display = 'block';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al cargar detalles del gen');
+        }
+    }
+
+    function cerrarModal() {
+        document.getElementById('genModal').style.display = 'none';
+    }
+
+    // Cargar genomas al iniciar si estamos en comparativa
+    window.addEventListener('load', function() {
+        if (document.getElementById('genoma1-select')) {
+            cargarGenomosDisponibles();
+        }
+    });
+
+    // Cerrar modal clickeando afuera
+    window.onclick = function(event) {
+        const modal = document.getElementById('genModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
