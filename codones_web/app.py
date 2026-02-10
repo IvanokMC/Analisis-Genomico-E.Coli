@@ -7,9 +7,17 @@ from flask import Flask, render_template, jsonify, request
 from Bio import Entrez, SeqIO
 from collections import Counter
 import json
+from groq import Groq
 
 app = Flask(__name__)
 Entrez.email = "204800@gmail.com"
+
+# Configuración de Groq AI
+GROQ_API_KEY = "inserte_su_api-key"
+groq_client = Groq(api_key=GROQ_API_KEY)
+
+# Contexto de conversación para el chatbot
+CONVERSATION_CONTEXT = {}
 
 # IDs de diferentes cepas de E. coli en GenBank
 GENOMES = {
@@ -17,6 +25,7 @@ GENOMES = {
     "K-12 W3110": "NC_007779.1",
     "O157:H7 EDL933": "NC_002695.1",
     "CFT073 (UPEC)": "NC_004431.1",
+    "BL21 (TaKaRa)": "CP010816.1",
 }
 
 # Caché en memoria para genomas descargados
@@ -319,6 +328,99 @@ def validar_con_literatura(registro, stops_finales):
         })
     
     return validaciones
+
+# ========================================
+# SISTEMA DE IA - CHATBOT
+# ========================================
+
+def obtener_datos_genomicos_contexto():
+    """Obtiene resumen de datos genómicos para contexto de IA."""
+    try:
+        registro = descargar_genoma(GENOMES["K-12 MG1655 (Referencia)"])
+        if not registro:
+            return "No se pudo cargar el genoma."
+        
+        secuencia = str(registro.seq).upper()
+        genes = extraer_genes_detallados(registro)
+        compactacion = compactacion_genica(registro)
+        codones_cds = contar_codones_en_cds(registro)
+        stops_finales = contar_stops_finales(registro)
+        
+        contexto = f"""
+DATOS GENÓMICOS - E. coli K-12 MG1655:
+- Longitud: {len(secuencia):,} pb ({len(secuencia)/1_000_000:.2f} Mb)
+- Genes: {len(genes):,}
+- GC: {contenido_gc(secuencia):.2f}%
+- Densidad: {compactacion['porcentaje_compactacion']:.2f}%
+- STOP: TAA={stops_finales['TAA']}, TAG={stops_finales['TAG']}, TGA={stops_finales['TGA']}
+"""
+        return contexto
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def obtener_prompt_sistema(rol):
+    """Genera el prompt del sistema según el rol."""
+    contexto = obtener_datos_genomicos_contexto()
+    
+    config = {
+        "estudiante": "Explicar de forma simple y didáctica. Usa analogías.",
+        "investigador": "Análisis técnico profundo con terminología científica.",
+        "docente": "Balance entre rigor científico y claridad pedagógica.",
+        "divulgador": "Lenguaje accesible para audiencia general."
+    }
+    
+    return f"""Eres un asistente de análisis genómico de E. coli.
+ROL: {config.get(rol, config['estudiante'])}
+
+{contexto}
+
+Responde de forma clara y profesional."""
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    """Endpoint del chatbot IA."""
+    try:
+        data = request.get_json()
+        mensaje = data.get("message", "")
+        rol = data.get("role", "estudiante")
+        session_id = data.get("session_id", "default")
+        
+        if not mensaje:
+            return jsonify({"error": "Mensaje vacío"}), 400
+        
+        if session_id not in CONVERSATION_CONTEXT:
+            CONVERSATION_CONTEXT[session_id] = []
+        
+        CONVERSATION_CONTEXT[session_id].append({"role": "user", "content": mensaje})
+        
+        mensajes = [{"role": "system", "content": obtener_prompt_sistema(rol)}]
+        mensajes.extend(CONVERSATION_CONTEXT[session_id][-10:])
+        
+        chat_completion = groq_client.chat.completions.create(
+            messages=mensajes,
+            model="llama-3.1-8b-instant",
+            temperature=0.7,
+            max_tokens=1500,
+            top_p=0.9
+        )
+        
+        respuesta = chat_completion.choices[0].message.content
+        CONVERSATION_CONTEXT[session_id].append({"role": "assistant", "content": respuesta})
+        
+        return jsonify({"response": respuesta, "role": rol, "session_id": session_id})
+        
+    except Exception as e:
+        print(f"Error en chat: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/sugerencias-preguntas")
+def api_sugerencias_preguntas():
+    """Preguntas sugeridas."""
+    return jsonify({"preguntas": [
+        "¿Cuál es el significado del contenido GC?",
+        "¿Por qué E. coli K-12 es importante?",
+        "¿Qué indica la densidad de genes?"
+    ]})
 
 @app.route("/")
 def index():

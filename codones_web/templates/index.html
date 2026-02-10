@@ -500,6 +500,124 @@
             align-items: center;
             gap: 10px;
         }
+    </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="layout">
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <i class="fas fa-dna"></i>
+                Navegación
+            </div>
+        </div>
+        
+        <div class="nav-item active" onclick="showSection('dashboard')">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('codones-cds')">
+            <i class="fas fa-dna"></i>
+            <span>Codones CDS</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('codones-genoma')">
+            <i class="fas fa-search"></i>
+            <span>Exploratorio</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('graficos')">
+            <i class="fas fa-chart-line"></i>
+            <span>Gráficos</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('validacion')">
+            <i class="fas fa-check-circle"></i>
+            <span>Validación</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('compactacion')">
+            <i class="fas fa-compress"></i>
+            <span>Compactación</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('genes')">
+            <i class="fas fa-microscope"></i>
+            <span>Genes</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('espacios')">
+            <i class="fas fa-ban"></i>
+            <span>Espacios</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('comparativa')">
+            <i class="fas fa-balance-scale"></i>
+            <span>Comparativa</span>
+        </div>
+    </nav>
+
+    <main class="main-content" id="mainContent">
+        <header>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            
+            <div class="header-content">
+                <div class="bacteria-container">
+                    <svg class="bacteria" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="100" cy="100" rx="80" ry="40" fill="url(#grad1)" opacity="0.8"/>
+                        <ellipse cx="100" cy="100" rx="70" ry="35" fill="url(#grad2)"/>
+                        <path d="M 20 100 Q 10 80, 5 60" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <path d="M 20 100 Q 10 120, 5 140" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <path d="M 180 100 Q 190 80, 195 60" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <path d="M 180 100 Q 190 120, 195 140" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <circle cx="60" cy="90" r="3" fill="var(--secondary)"/>
+                        <circle cx="80" cy="85" r="3" fill="var(--secondary)"/>
+                        <circle cx="120" cy="85" r="3" fill="var(--secondary)"/>
+                        <circle cx="140" cy="90" r="3" fill="var(--secondary)"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--primary);stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:var(--secondary);stop-opacity:0.4" />
+                            </linearGradient>
+                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:var(--primary);stop-opacity:0.9" />
+                                <stop offset="50%" style="stop-color:var(--secondary);stop-opacity:0.7" />
+                                <stop offset="100%" style="stop-color:var(--primary);stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                
+                <h1>🧬 Análisis Genómico</h1>
+                <p class="subtitle"><i>Escherichia coli</i> K-12 MG1655</p>
+                <p class="author">Universidad Nacional San Antonio Abad del Cusco</p>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="section active">
+                <h2 class="section-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard Principal
+                </h2>
+
+                <div class="dashboard">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-ruler-horizontal"></i></div>
+                        <div class="metric-label">Longitud del Genoma</div>
+                        <div class="metric-value">{{ "%.2f"|format(genome_length / 1000000) }} Mb</div>
+                        <div class="metric-subtext">{{ "{:,}".format(genome_length) }} pares de bases</div>
+                    </div>
 
         .alert-box {
             background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.05));
@@ -937,6 +1055,490 @@
                 grid-template-columns: 1fr;
             }
         }
+/* ========================================
+           ESTILOS DEL ASISTENTE IA
+           ======================================== */
+        
+        .chat-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+        
+        .chat-sidebar-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        
+        .chat-main-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .role-selector {
+            margin-bottom: 25px;
+        }
+        
+        .role-selector h3 {
+            color: var(--primary);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .role-option {
+            background: rgba(0, 240, 255, 0.05);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .role-option:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .role-option.active {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), transparent);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        
+        .role-option i {
+            font-size: 1.3em;
+            color: var(--primary);
+        }
+        
+        .role-info {
+            flex: 1;
+        }
+        
+        .role-name {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .role-desc {
+            color: #999;
+            font-size: 0.85em;
+        }
+        
+        .suggestions-panel {
+            margin-top: 25px;
+        }
+        
+        .suggestions-panel h3 {
+            color: var(--primary);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .suggestion-category {
+            margin-bottom: 15px;
+        }
+        
+        .suggestion-category-title {
+            color: var(--secondary);
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding-left: 5px;
+        }
+        
+        .suggestion-item {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        
+        .suggestion-item:hover {
+            background: rgba(0, 240, 255, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+            border-bottom: 2px solid var(--border);
+            padding: 20px 25px;
+        }
+        
+        .chat-header h2 {
+            color: var(--primary);
+            font-size: 1.5em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            scroll-behavior: smooth;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            animation: messageSlideIn 0.4s ease;
+        }
+        
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message-user {
+            text-align: right;
+        }
+        
+        .message-assistant {
+            text-align: left;
+        }
+        
+        .message-bubble {
+            display: inline-block;
+            max-width: 75%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .message-user .message-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #000;
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .message-assistant .message-bubble {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--border);
+            color: #e0e0ff;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message-timestamp {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            display: inline-block;
+        }
+        
+        .typing-indicator.active {
+            display: inline-block;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin: 0 3px;
+            animation: typingBounce 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .chat-input-container {
+            border-top: 2px solid var(--border);
+            padding: 20px 25px;
+            background: rgba(0, 0, 20, 0.5);
+        }
+        
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: rgba(0, 240, 255, 0.05);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: #e0e0ff;
+            font-size: 1em;
+            font-family: inherit;
+            resize: none;
+            max-height: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: rgba(0, 240, 255, 0.08);
+        }
+        
+        .chat-send-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #000;
+            font-size: 1.2em;
+        }
+        
+        .chat-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
+        }
+        
+        .chat-send-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .welcome-message i {
+            font-size: 4em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .welcome-message h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 1024px) {
+            .chat-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-sidebar-panel {
+                display: none;
+            }
+        }
+    
+        /* ========================================
+           ESTILOS DEL ASISTENTE IA
+           ======================================== */
+        
+        .chat-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+        
+        .chat-sidebar-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        
+        .chat-main-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .role-selector h3 {
+            color: var(--primary);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        
+        .role-option {
+            background: rgba(0, 240, 255, 0.05);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .role-option:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .role-option.active {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), transparent);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            animation: messageSlideIn 0.4s ease;
+        }
+        
+        @keyframes messageSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message-user { text-align: right; }
+        .message-assistant { text-align: left; }
+        
+        .message-bubble {
+            display: inline-block;
+            max-width: 75%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            line-height: 1.6;
+        }
+        
+        .message-user .message-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #000;
+            font-weight: 500;
+        }
+        
+        .message-assistant .message-bubble {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--border);
+            color: #e0e0ff;
+        }
+        
+        .chat-input-container {
+            border-top: 2px solid var(--border);
+            padding: 20px 25px;
+        }
+        
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: rgba(0, 240, 255, 0.05);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: #e0e0ff;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        
+        .chat-send-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.2em;
+        }
+        
+        .chat-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
+        }
+        
+        @media (max-width: 1024px) {
+            .chat-container {
+                grid-template-columns: 1fr;
+            }
+            .chat-sidebar-panel {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -954,49 +1556,58 @@
             </div>
         </div>
         
-        <div class="nav-item active" onclick="showSection('dashboard')">
+        <div class="nav-item active" onclick="showSection('dashboard', this)">
             <i class="fas fa-home"></i>
             <span>Dashboard</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('codones-cds')">
+        <div class="nav-item" onclick="showSection('codones-cds', this)">
             <i class="fas fa-dna"></i>
             <span>Codones CDS</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('codones-genoma')">
+        <div class="nav-item" onclick="showSection('codones-genoma', this)">
             <i class="fas fa-search"></i>
             <span>Exploratorio</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('graficos')">
+        <div class="nav-item" onclick="showSection('graficos', this)">
             <i class="fas fa-chart-line"></i>
             <span>Gráficos</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('validacion')">
+        <div class="nav-item" onclick="showSection('validacion', this)">
             <i class="fas fa-check-circle"></i>
             <span>Validación</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('compactacion')">
+        <div class="nav-item" onclick="showSection('compactacion', this)">
             <i class="fas fa-compress"></i>
             <span>Compactación</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('genes')">
+        <div class="nav-item" onclick="showSection('genes', this)">
             <i class="fas fa-microscope"></i>
             <span>Genes</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('espacios')">
+        <div class="nav-item" onclick="showSection('espacios', this)">
             <i class="fas fa-ban"></i>
             <span>Espacios</span>
         </div>
         
-        <div class="nav-item" onclick="showSection('comparativa')">
+        <div class="nav-item" onclick="showSection('comparativa', this)">
             <i class="fas fa-balance-scale"></i>
             <span>Comparativa</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('asistente-ia', this)">
+            <i class="fas fa-robot"></i>
+            <span>Asistente IA</span>
+        </div>
+        <div class="nav-item" onclick="showSection('diagrama-genomico', this)">
+            <i class="fas fa-project-diagram"></i> 
+            <span>Diagrama Genómico</span>
         </div>
     </nav>
 
@@ -1061,7 +1672,7 @@
                         <div class="metric-label">Contenido GC</div>
                         <div class="metric-value">{{ "%.2f"|format(gc) }}%</div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ gc }}%">{{ "%.1f"|format(gc) }}%</div>
+                            <div class="progress-fill" data-width="{{ gc }}">{{ "%.1f"|format(gc) }}%</div>
                         </div>
                     </div>
 
@@ -1190,7 +1801,7 @@
                             <div class="stat-label">TAA (Ochre)</div>
                             <div class="stat-value">{{ "{:,}".format(codones_stop_cds.TAA) }}</div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ stop_props_cds.TAA }}%">
+                                <div class="progress-fill" data-width="{{ stop_props_cds.TAA }}">
                                     {{ "%.1f"|format(stop_props_cds.TAA) }}%
                                 </div>
                             </div>
@@ -1204,7 +1815,7 @@
                             <div class="stat-label">TAG (Amber)</div>
                             <div class="stat-value">{{ "{:,}".format(codones_stop_cds.TAG) }}</div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ stop_props_cds.TAG * 2 }}%; background: linear-gradient(90deg, var(--accent), #ff9999);">
+                                <div class="progress-fill" data-width="{{ stop_props_cds.TAG * 2 }}" style="background: linear-gradient(90deg, var(--accent), #ff9999);">
                                     {{ "%.1f"|format(stop_props_cds.TAG) }}%
                                 </div>
                             </div>
@@ -1218,7 +1829,7 @@
                             <div class="stat-label">TGA (Opal)</div>
                             <div class="stat-value">{{ "{:,}".format(codones_stop_cds.TGA) }}</div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ stop_props_cds.TGA }}%; background: linear-gradient(90deg, var(--secondary), var(--primary));">
+                                <div class="progress-fill" data-width="{{ stop_props_cds.TGA }}" style="background: linear-gradient(90deg, var(--secondary), var(--primary));">
                                     {{ "%.1f"|format(stop_props_cds.TGA) }}%
                                 </div>
                             </div>
@@ -1453,7 +2064,7 @@
                             <div class="stat-label">% Codificante</div>
                             <div class="stat-value">{{ "%.2f"|format(compactacion.porcentaje_compactacion) }}%</div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ compactacion.porcentaje_compactacion }}%">
+                                <div class="progress-fill" data-width="{{ compactacion.porcentaje_compactacion }}">
                                     {{ "%.1f"|format(compactacion.porcentaje_compactacion) }}%
                                 </div>
                             </div>
@@ -1565,6 +2176,95 @@
                 </div>
             </div>
 
+            <!-- ASISTENTE IA -->
+            <div id="asistente-ia" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-robot"></i>
+                    Asistente IA - Análisis Genómico
+                </h2>
+                
+                <div class="chat-container">
+                    <div class="chat-sidebar-panel">
+                        <div class="role-selector">
+                            <h3><i class="fas fa-user-circle"></i> Nivel de Explicación</h3>
+                            <div class="role-option active" data-role="estudiante" onclick="seleccionarRol('estudiante')">
+                                <strong>🎓 Estudiante</strong><br>
+                                <small style="color: #999;">Explicaciones simples</small>
+                            </div>
+                            <div class="role-option" data-role="investigador" onclick="seleccionarRol('investigador')">
+                                <strong>🔬 Investigador</strong><br>
+                                <small style="color: #999;">Análisis técnico</small>
+                            </div>
+                            <div class="role-option" data-role="docente" onclick="seleccionarRol('docente')">
+                                <strong>👨‍🏫 Docente</strong><br>
+                                <small style="color: #999;">Enfoque pedagógico</small>
+                            </div>
+                            <div class="role-option" data-role="divulgador" onclick="seleccionarRol('divulgador')">
+                                <strong>📢 Divulgador</strong><br>
+                                <small style="color: #999;">Lenguaje accesible</small>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 25px;">
+                            <h3 style="color: var(--primary); font-size: 1.1em; margin-bottom: 15px;">
+                                <i class="fas fa-lightbulb"></i> Preguntas Sugeridas
+                            </h3>
+                            <div style="background: rgba(0,240,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; cursor: pointer; font-size: 0.9em;" onclick="enviarPreguntaSugerida(this)">
+                                ¿Cuál es el significado del contenido GC?
+                            </div>
+                            <div style="background: rgba(0,240,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; cursor: pointer; font-size: 0.9em;" onclick="enviarPreguntaSugerida(this)">
+                                ¿Por qué E. coli K-12 es importante?
+                            </div>
+                            <div style="background: rgba(0,240,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; cursor: pointer; font-size: 0.9em;" onclick="enviarPreguntaSugerida(this)">
+                                Resume los datos principales del genoma
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-main-panel">
+                        <div style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent); border-bottom: 2px solid var(--border); padding: 20px 25px;">
+                            <h2 style="color: var(--primary); margin: 0;">
+                                <i class="fas fa-comments"></i> Chat con IA
+                            </h2>
+                        </div>
+                        
+                        <div class="chat-messages" id="chatMessages">
+                            <div style="text-align: center; padding: 40px 20px; color: #999;">
+                                <i class="fas fa-robot" style="font-size: 4em; color: var(--primary); opacity: 0.3; margin-bottom: 20px;"></i>
+                                <h3 style="color: var(--secondary); margin-bottom: 10px;">¡Hola! Soy tu asistente de análisis genómico</h3>
+                                <p>Pregúntame sobre E. coli, genómica, o los datos del análisis.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="chatInput" 
+                                    class="chat-input" 
+                                    placeholder="Escribe tu pregunta aquí..."
+                                    onkeypress="if(event.key === 'Enter') enviarMensaje()"
+                                />
+                                <button id="chatSendBtn" class="chat-send-btn" onclick="enviarMensaje()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="diagrama-genomico" class="section">
+                <div class="section-title">
+                    <i class="fas fa-project-diagram"></i> Diagrama del Genoma
+                </div>
+                <div class="card" style="padding: 20px; background: var(--bg-card); border-radius: 20px;">
+                    <div class="mxgraph-container" style="width: 100%; height: 900px; min-height: 600px;">
+                        <div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;dark-mode&quot;:&quot;auto&quot;,&quot;toolbar&quot;:&quot;zoom layers tags lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;app.diagrams.net\&quot; agent=\&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 OPR/126.0.0.0\&quot; version=\&quot;29.3.7\&quot;&gt;\n  &lt;diagram name=\&quot;Página-1\&quot; id=\&quot;K_9_WGEMNg_ffG-d1WFP\&quot;&gt;\n    &lt;mxGraphModel dx=\&quot;1813\&quot; dy=\&quot;985\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;827\&quot; pageHeight=\&quot;1169\&quot; math=\&quot;0\&quot; shadow=\&quot;0\&quot;&gt;\n      &lt;root&gt;\n        &lt;mxCell id=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Célula\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;105\&quot; x=\&quot;1127\&quot; y=\&quot;160\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-146\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Teoría celular\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;100\&quot; x=\&quot;1067\&quot; y=\&quot;52\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-147\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Ciclo de vida celular\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;132\&quot; x=\&quot;887\&quot; y=\&quot;32\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-148\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Vía metabólica\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;167\&quot; x=\&quot;673.5\&quot; y=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-149\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Célula eucariota\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;178\&quot; x=\&quot;567\&quot; y=\&quot;150\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-150\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Célula procariota\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;184\&quot; x=\&quot;784\&quot; y=\&quot;190\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;ADN\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;89\&quot; x=\&quot;1578.75\&quot; y=\&quot;540\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-152\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Cromosoma\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;143\&quot; x=\&quot;984\&quot; y=\&quot;283\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-153\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Gen\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;80\&quot; x=\&quot;924.5\&quot; y=\&quot;369\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-154\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Herencia mendeliana\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;131\&quot; x=\&quot;703\&quot; y=\&quot;423\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-155\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Mutación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;75\&quot; x=\&quot;793\&quot; y=\&quot;509\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-156\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Ligamiento genético\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;113\&quot; x=\&quot;1036\&quot; y=\&quot;395\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-157\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Mapa genético\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;164\&quot; x=\&quot;990\&quot; y=\&quot;509\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-158\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Nucleótido\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;101\&quot; x=\&quot;1372\&quot; y=\&quot;215.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-159\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Bases nitrogenadas\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;160\&quot; x=\&quot;1342.5\&quot; y=\&quot;85.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-160\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Regla de Chargaff\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;123\&quot; x=\&quot;1513\&quot; y=\&quot;215.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-161\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Doble hélice\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;96\&quot; x=\&quot;1668\&quot; y=\&quot;215.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-162\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Complementariedad de bases\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;56\&quot; width=\&quot;192\&quot; x=\&quot;1620\&quot; y=\&quot;115.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-163\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Replicación del ADN\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;202\&quot; x=\&quot;1615\&quot; y=\&quot;5.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-164\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Transcripción\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;155\&quot; x=\&quot;1247\&quot; y=\&quot;501\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-165\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;ARN\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;89\&quot; x=\&quot;1167\&quot; y=\&quot;626\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-166\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;ARN polimerasa\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;172\&quot; x=\&quot;1317\&quot; y=\&quot;626\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-167\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;ARN mensajero\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;169\&quot; x=\&quot;526\&quot; y=\&quot;583.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-168\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Exón\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;94\&quot; x=\&quot;528\&quot; y=\&quot;269.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-169\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Intrón\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;103\&quot; x=\&quot;641.5\&quot; y=\&quot;269.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-170\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Splicing\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;115\&quot; x=\&quot;573\&quot; y=\&quot;387.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-171\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Traducción\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;138\&quot; x=\&quot;688\&quot; y=\&quot;683\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-172\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Ribosoma\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;128\&quot; x=\&quot;450\&quot; y=\&quot;736.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-173\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Proteína\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;120\&quot; x=\&quot;633\&quot; y=\&quot;783\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-174\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Polipéptido\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;141\&quot; x=\&quot;473\&quot; y=\&quot;862.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-175\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Aminoácido\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;143\&quot; x=\&quot;472\&quot; y=\&quot;982.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-176\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Codón\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;104\&quot; x=\&quot;280\&quot; y=\&quot;606.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-177\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Código genético\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;110\&quot; x=\&quot;125\&quot; y=\&quot;606.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-178\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Degeneración del código genético\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;78\&quot; width=\&quot;123\&quot; x=\&quot;20\&quot; y=\&quot;696.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-179\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Codón de inicio\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;115\&quot; x=\&quot;274.5\&quot; y=\&quot;719.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-180\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Codón de terminación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;160\&quot; x=\&quot;280\&quot; y=\&quot;473.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-181\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;ARN de transferencia\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;120\&quot; x=\&quot;884.5\&quot; y=\&quot;700\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-182\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Anticodón\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;70\&quot; x=\&quot;1117\&quot; y=\&quot;720\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-183\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Dogma central\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;164\&quot; x=\&quot;1107\&quot; y=\&quot;850\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-184\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;PCR\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;88\&quot; x=\&quot;1837\&quot; y=\&quot;349\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-185\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Cebador\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;80.5\&quot; x=\&quot;1844.5\&quot; y=\&quot;150\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-186\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Desnaturalización\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;123\&quot; x=\&quot;1967\&quot; y=\&quot;136\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-187\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Alineamiento\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;103\&quot; x=\&quot;2107\&quot; y=\&quot;204\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-188\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Extensión\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;83\&quot; x=\&quot;2097\&quot; y=\&quot;283\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-189\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Clonación molecular\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;129.5\&quot; x=\&quot;1887.5\&quot; y=\&quot;455\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-190\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Vector de clonación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;123\&quot; x=\&quot;2067\&quot; y=\&quot;369\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-191\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Biblioteca de clones\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;130.5\&quot; x=\&quot;2109.5\&quot; y=\&quot;441.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-192\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Enzima de restricción\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;215\&quot; x=\&quot;1666.5\&quot; y=\&quot;708.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-193\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Sitio de reconocimiento\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;145.5\&quot; x=\&quot;1507\&quot; y=\&quot;890\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-194\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Extremos romos\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;115.5\&quot; x=\&quot;1687\&quot; y=\&quot;890\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-195\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Extremos pegajosos\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;131.5\&quot; x=\&quot;1835.5\&quot; y=\&quot;890\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-196\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Hibridación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;142\&quot; x=\&quot;1745.5\&quot; y=\&quot;994\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-197\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Ligación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;119\&quot; x=\&quot;1757\&quot; y=\&quot;1090\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-198\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Electroforesis en gel\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;150\&quot; x=\&quot;1959.5\&quot; y=\&quot;970\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-199\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Sonda\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;102\&quot; x=\&quot;2047\&quot; y=\&quot;696.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-200\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Microarreglo\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;110\&quot; x=\&quot;2077\&quot; y=\&quot;808.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-201\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Variación genética intraespecífica\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;78\&quot; width=\&quot;260\&quot; x=\&quot;2053.5\&quot; y=\&quot;546\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-202\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Genoma de referencia\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;140\&quot; x=\&quot;2197\&quot; y=\&quot;680\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-203\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Conservación genética\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;140\&quot; x=\&quot;2417\&quot; y=\&quot;606.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-204\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Evolución\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;128\&quot; x=\&quot;2361\&quot; y=\&quot;750.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-205\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Selección natural\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;184\&quot; x=\&quot;2226\&quot; y=\&quot;878.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-206\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Adaptación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;140\&quot; x=\&quot;2248\&quot; y=\&quot;1006.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-207\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Especiación\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;143\&quot; x=\&quot;2460\&quot; y=\&quot;878.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-208\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Genómica comparativa\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;225\&quot; x=\&quot;2354.5\&quot; y=\&quot;486\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-209\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Alineamiento de secuencias\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;180\&quot; x=\&quot;2377\&quot; y=\&quot;369\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-210\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;BLAST\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;74\&quot; x=\&quot;2425\&quot; y=\&quot;258\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-211\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Bioinformática\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;110.5\&quot; x=\&quot;2406.75\&quot; y=\&quot;150\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-212\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;strokeWidth=2;\&quot; value=\&quot;Alfabeto molecular\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;54\&quot; width=\&quot;197\&quot; x=\&quot;1090.5\&quot; y=\&quot;940\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-213\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;entryX=0.75;entryY=1;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-146\&quot; value=\&quot;es la base de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.2245\&quot; y=\&quot;-6\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1150\&quot; y=\&quot;140\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-214\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.25;exitY=0;entryX=0.75;entryY=1;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-147\&quot; value=\&quot;presenta\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1050\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-215\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.25;entryX=1;entryY=0.75;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-148\&quot; value=\&quot;realiza\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;980\&quot; y=\&quot;120\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-216\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=1;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-149\&quot; value=\&quot;puede ser\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.0891\&quot; y=\&quot;28\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;887\&quot; y=\&quot;140\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;1127\&quot; y=\&quot;187\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-217\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.75;entryX=1;entryY=0.5;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-150\&quot; value=\&quot;puede ser\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.0147\&quot; y=\&quot;-12\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1077\&quot; y=\&quot;200\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-218\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-145\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.53;rounded=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; value=\&quot;contiene\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.0809\&quot; y=\&quot;-56\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1410\&quot; y=\&quot;300\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;1787\&quot; y=\&quot;500\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-219\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.53;entryX=1;entryY=0.5;rounded=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-152\&quot; value=\&quot;se organiza en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.099\&quot; y=\&quot;52\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1320\&quot; y=\&quot;350\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-220\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-152\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.49;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-153\&quot; value=\&quot;contiene\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-221\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-153\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.5;entryX=0.75;entryY=0;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-154\&quot; value=\&quot;explica\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.0634\&quot; y=\&quot;-24\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;853\&quot; y=\&quot;381\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-222\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-153\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=1;entryY=0.27;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-155\&quot; value=\&quot;puede sufrir\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.1429\&quot; y=\&quot;9\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;933\&quot; y=\&quot;514\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;943\&quot; y=\&quot;431\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-223\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-152\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.629;exitY=1.037;entryX=0.566;entryY=0;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-156\&quot; value=\&quot;presenta\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1100\&quot; y=\&quot;360\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-224\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-156\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=0.5;entryY=0;rounded=0;entryDx=0;entryDy=0;exitX=0.576;exitY=1.033;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-157\&quot; value=\&quot;permite construir\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1100\&quot; y=\&quot;485\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;1111\&quot; y=\&quot;455\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-225\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.25;exitY=0;entryX=1;entryY=1;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-158\&quot; value=\&quot;está formado por\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.1731\&quot; y=\&quot;8\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1530\&quot; y=\&quot;330\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-226\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-159\&quot; value=\&quot;incluye\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n            &lt;mxPoint x=\&quot;1422.25\&quot; y=\&quot;215.5\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;1416.25\&quot; y=\&quot;85.5\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-227\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;entryX=0.614;entryY=0.986;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-160\&quot; value=\&quot;obedece\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.0684\&quot; y=\&quot;9\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1630\&quot; y=\&quot;360\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-228\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.75;exitY=0;entryX=0.5;entryY=1;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-161\&quot; value=\&quot;adopta estructura de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.03\&quot; y=\&quot;7\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1716\&quot; y=\&quot;370\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-229\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-161\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;rounded=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-162\&quot; value=\&quot;se basa en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n            &lt;mxPoint x=\&quot;1716.25\&quot; y=\&quot;165.5\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-230\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-162\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-163\&quot; value=\&quot;permite\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n            &lt;mxPoint x=\&quot;1713\&quot; y=\&quot;419.5\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-231\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.62;entryX=1;entryY=0.5;rounded=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-164\&quot; value=\&quot;sirve como molde en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.1007\&quot; y=\&quot;-3\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1477\&quot; y=\&quot;560\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-232\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-164\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.064;exitY=0.974;entryX=0.5;entryY=0;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-165\&quot; value=\&quot;produce\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.1033\&quot; y=\&quot;10\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1211\&quot; y=\&quot;577\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-233\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-164\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.8;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-166\&quot; value=\&quot;es catalizada por\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.0908\&quot; y=\&quot;-8\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1397\&quot; y=\&quot;590\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-234\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-165\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.25;entryX=1;entryY=0.36;rounded=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-167\&quot; value=\&quot;puede ser\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;977\&quot; y=\&quot;630\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-235\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-149\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.35;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-168\&quot; value=\&quot;presenta\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;590\&quot; y=\&quot;230\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-236\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-149\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=0.5;entryY=0;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-169\&quot; value=\&quot;presenta\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;690\&quot; y=\&quot;230\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;663\&quot; y=\&quot;162\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-237\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-149\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.89;exitY=1;entryX=1;entryY=0.06;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-170\&quot; value=\&quot;realiza\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.1502\&quot; y=\&quot;-25\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;1\&quot; as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;827\&quot; y=\&quot;300\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-238\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-168\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.23;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-170\&quot; value=\&quot;se conserva en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;575\&quot; y=\&quot;338.5\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-239\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-169\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.73;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-170\&quot; value=\&quot;se elimina en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;690\&quot; y=\&quot;350\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-240\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-170\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.454;entryY=0.004;rounded=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-167\&quot; value=\&quot;genera\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;618\&quot; y=\&quot;529.5\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-241\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-167\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=0;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-171\&quot; value=\&quot;es leído en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;650\&quot; y=\&quot;699.5\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;522.692\&quot; y=\&quot;682.5219999999999\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;731\&quot; y=\&quot;709.5\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-242\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-171\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.11;exitY=1.012;entryX=1;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-172\&quot; value=\&quot;ocurre en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;660\&quot; y=\&quot;759.5\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;731\&quot; y=\&quot;723.0000000000005\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-243\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-171\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-173\&quot; value=\&quot;produce\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-244\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-173\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.75;entryX=0.5;entryY=0;rounded=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-174\&quot; value=\&quot;está formada por\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.2437\&quot; y=\&quot;22\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;569\&quot; y=\&quot;822.5\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;676\&quot; y=\&quot;818.6800000000003\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-245\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-174\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-175\&quot; value=\&quot;se compone de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-246\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-167\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.5;entryX=1;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-176\&quot; value=\&quot;se organiza en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;460\&quot; y=\&quot;639.5\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-247\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-176\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.115;exitY=-0.043;entryX=0.5;entryY=0;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-177\&quot; value=\&quot;pertenece al\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.148\&quot; y=\&quot;7\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;230\&quot; y=\&quot;559.5\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-248\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-177\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=0.5;entryY=0;rounded=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-178\&quot; value=\&quot;presenta\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;80\&quot; y=\&quot;679.5\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;138\&quot; y=\&quot;686.5\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-249\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-176\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-179\&quot; value=\&quot;puede ser\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-250\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-176\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.404;exitY=-0.012;entryX=0.25;entryY=1;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-180\&quot; value=\&quot;puede ser\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-251\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-171\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;entryX=0;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-181\&quot; value=\&quot;requiere\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;877\&quot; y=\&quot;730\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;827\&quot; y=\&quot;700\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-252\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-181\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-182\&quot; value=\&quot;reconoce mediante\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-253\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.068;exitY=1.019;entryX=1;entryY=0.39;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-183\&quot; value=\&quot;fluye hacia\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.0795\&quot; y=\&quot;-42\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1507\&quot; y=\&quot;790\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-254\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-165\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.609;entryY=-0.023;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-183\&quot; value=\&quot;fluye hacia\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.1917\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1257\&quot; y=\&quot;770\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-255\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-173\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.25;entryX=0;entryY=0.5;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-183\&quot; value=\&quot;es el producto final de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;977\&quot; y=\&quot;880\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;1129\&quot; y=\&quot;999.44\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-256\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0;entryX=-0.009;entryY=0.363;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-184\&quot; value=\&quot;puede amplificarse por\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.0988\&quot; y=\&quot;-46\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1707\&quot; y=\&quot;430\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-257\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-184\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.164;exitY=-0.026;entryX=0.44;entryY=0.985;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-185\&quot; value=\&quot;utiliza\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.0377\&quot; y=\&quot;-9\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1837\&quot; y=\&quot;280\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-258\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-184\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.445;exitY=-0.041;entryX=0.171;entryY=1;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-186\&quot; value=\&quot;incluye etapa de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.0295\&quot; y=\&quot;-12\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1897\&quot; y=\&quot;270\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-259\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-184\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.836;exitY=-0.026;entryX=0;entryY=0.5;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-187\&quot; value=\&quot;incluye etapa de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;-0.2597\&quot; y=\&quot;-12\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1987\&quot; y=\&quot;260\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-260\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-184\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.411;rounded=0;entryDx=0;entryDy=0;entryPerimeter=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-188\&quot; value=\&quot;incluye etapa de\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.1638\&quot; y=\&quot;-13\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1987\&quot; y=\&quot;320\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-261\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.25;entryX=0;entryY=0.75;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-189\&quot; value=\&quot;puede manipularse mediante\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-262\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-189\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;entryX=0;entryY=0.25;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-190\&quot; value=\&quot;utiliza\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1987\&quot; y=\&quot;410\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-263\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-189\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.75;entryX=0;entryY=0.75;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-191\&quot; value=\&quot;genera\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.0371\&quot; y=\&quot;9\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2067\&quot; y=\&quot;500\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-264\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.54;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-192\&quot; value=\&quot;puede cortarse con\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.1602\&quot; y=\&quot;-13\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1747\&quot; y=\&quot;630\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-265\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-192\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.91;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-193\&quot; value=\&quot;reconoce\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1597\&quot; y=\&quot;810\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-266\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-192\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.3;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-194\&quot; value=\&quot;produce\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1757\&quot; y=\&quot;830\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-267\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-192\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.69;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-195\&quot; value=\&quot;produce\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1897\&quot; y=\&quot;810\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-268\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-194\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.25;entryY=0;rounded=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-196\&quot; value=\&quot;pueden unirse por\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1757\&quot; y=\&quot;970\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-269\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-195\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.75;entryY=0;rounded=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-196\&quot; value=\&quot;facilitan\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1877\&quot; y=\&quot;970\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-270\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-196\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-197\&quot; value=\&quot;se estabiliza por\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-271\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.54;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-198\&quot; value=\&quot;puede separarse mediante\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.4524\&quot; y=\&quot;-14\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1857\&quot; y=\&quot;610\&quot; /&gt;\n              &lt;mxPoint x=\&quot;2037\&quot; y=\&quot;850\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-272\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.53;entryX=0.157;entryY=-0.032;rounded=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-199\&quot; value=\&quot;puede detectarse con\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1997\&quot; y=\&quot;630\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-273\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-199\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-200\&quot; value=\&quot;se aplica en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2132\&quot; y=\&quot;790\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-274\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.53;entryX=0;entryY=0.5;rounded=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-201\&quot; value=\&quot;presenta\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1917\&quot; y=\&quot;550\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-275\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-201\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.25;exitY=1;entryX=0;entryY=0.25;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-202\&quot; value=\&quot;se compara con\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.09\&quot; y=\&quot;6\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint y=\&quot;-1\&quot; as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2127\&quot; y=\&quot;670\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-276\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-201\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1.002;exitY=0.667;entryX=-0.014;entryY=0.398;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-203\&quot; value=\&quot;explica\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2367\&quot; y=\&quot;610\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-277\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-203\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.179;exitY=1.083;entryX=0.5;entryY=0;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-204\&quot; value=\&quot;evidencia\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2457\&quot; y=\&quot;710\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-278\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-204\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.15;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-205\&quot; value=\&quot;opera mediante\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2318\&quot; y=\&quot;841.5\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-279\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-205\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-206\&quot; value=\&quot;conduce a\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-280\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-204\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.85;exitY=1;entryX=0.5;entryY=0;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-207\&quot; value=\&quot;puede originar\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2532\&quot; y=\&quot;841.5\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-281\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-203\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.425;exitY=-0.065;entryX=0.542;entryY=0.981;rounded=0;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;entryPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-208\&quot; value=\&quot;se estudia con\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2493\&quot; y=\&quot;580\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-282\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-208\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;entryX=0.5;entryY=1;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-209\&quot; value=\&quot;emplea\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-283\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-209\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.475;exitY=-0.019;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-210\&quot; value=\&quot;implementado en\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;2462\&quot; y=\&quot;340\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;2467\&quot; y=\&quot;360\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;2462\&quot; y=\&quot;310\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-284\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-210\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=0;entryX=0.5;entryY=1;rounded=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-211\&quot; value=\&quot;pertenece a\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.074\&quot; y=\&quot;6\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-285\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-151\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=0.25;exitY=1;entryX=1;entryY=0.44;rounded=0;exitDx=0;exitDy=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-212\&quot; value=\&quot;se representa como\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; x=\&quot;0.24\&quot; y=\&quot;-38\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint as=\&quot;offset\&quot; /&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;1527\&quot; y=\&quot;870\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;ZrfB_EpvOdFak8gvY_mV-286\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;ZrfB_EpvOdFak8gvY_mV-173\&quot; style=\&quot;curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.66;entryX=0;entryY=0.44;rounded=0;\&quot; target=\&quot;ZrfB_EpvOdFak8gvY_mV-212\&quot; value=\&quot;se representa como\&quot;&gt;\n          &lt;mxGeometry relative=\&quot;1\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;887\&quot; y=\&quot;960\&quot; /&gt;\n            &lt;/Array&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n      &lt;/root&gt;\n    &lt;/mxGraphModel&gt;\n  &lt;/diagram&gt;\n&lt;/mxfile&gt;\n&quot;}"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <footer>
@@ -1573,7 +2273,8 @@
             <p style="margin-top: 15px; font-size: 0.9em;">Python | Flask | BioPython | Chart.js</p>
             <p style="margin-top: 10px; color: var(--secondary);">Versión 2.0 - Con Comparativa Interactiva y Detalles de Genes</p>
         </footer>
-    </main>
+
+        </main>
 </div>
 
 <!-- MODAL PARA DETALLES DE GEN -->
@@ -1598,16 +2299,34 @@
         mainContent.classList.toggle('expanded');
     }
 
-    function showSection(sectionId) {
+
+
+    function aplicarAnchosProgreso() {
+        document.querySelectorAll('.progress-fill[data-width]').forEach(el => {
+            const raw = el.getAttribute('data-width');
+            const value = parseFloat(raw);
+            if (Number.isNaN(value)) return;
+            const clamped = Math.max(0, Math.min(100, value));
+            el.style.width = `${clamped}%`;
+        });
+    }
+    
+    function showSection(sectionId, clickedElement = null) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
         
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        event.target.closest('.nav-item').classList.add('active');
+        if (clickedElement) {
+            clickedElement.classList.add('active');
+        }
         
         if (sectionId === 'graficos') cargarGraficos();
         if (sectionId === 'genes') buscarGenes();
         if (sectionId === 'comparativa') cargarGenomosDisponibles();
+        if (sectionId === 'asistente-ia') { /* Inicializar chat si es necesario */ }
         
         if (window.innerWidth <= 1024) {
             toggleSidebar();
@@ -1983,11 +2702,197 @@
         document.getElementById('mainContent').classList.add('expanded');
     }
 
+// ========================================
+    // SISTEMA DE IA - CHATBOT
+    // ========================================
+    document.addEventListener('DOMContentLoaded', () => {
+    let rolActual = 'estudiante';
+    let sessionId = 'session_' + Date.now();
+    
+    function seleccionarRol(rol) {
+        rolActual = rol;
+        
+        // Actualizar UI
+        const roleOptions = document.querySelectorAll('.role-option');
+        if (!roleOptions.length) {
+            console.error('Elementos del chat no encontrados: .role-option');
+            return;
+        }
+        roleOptions.forEach(opt => {
+            opt.classList.remove('active');
+        });
+        const activeRole = document.querySelector(`[data-role="${rol}"]`);
+        if (activeRole) {
+            activeRole.classList.add('active');
+        }
+        
+        // Agregar mensaje del sistema
+        agregarMensajeAsistente(`He cambiado al modo ${rol}. Ahora adaptaré mis explicaciones a este nivel.`);
+    }
+    
+    function enviarPreguntaSugerida(elemento) {
+        const pregunta = elemento.textContent.trim();
+        const input = document.getElementById('chatInput');
+        if (!input) {
+            console.error('Elemento del chat no encontrado: #chatInput');
+            return;
+        }
+        input.value = pregunta;
+        enviarMensaje();
+    }
+    
+    async function enviarMensaje() {
+        const input = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('chatSendBtn');
+        if (!input || !sendBtn) {
+            console.error('Elementos del chat no encontrados: #chatInput o #chatSendBtn');
+            return;
+        }
+        const mensaje = input.value.trim();
+        
+        if (!mensaje) return;
+        
+        // Agregar mensaje del usuario
+        agregarMensajeUsuario(mensaje);
+        input.value = '';
+        
+        // Deshabilitar input mientras procesa
+        sendBtn.disabled = true;
+        input.disabled = true;
+        
+        // Mostrar indicador de escritura
+        mostrarTypingIndicator();
+        
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: mensaje,
+                    role: rolActual,
+                    session_id: sessionId
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                agregarMensajeAsistente(`❌ Error: ${data.error}`);
+            } else {
+                agregarMensajeAsistente(data.response);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            agregarMensajeAsistente('❌ Error de conexión. Por favor, intenta de nuevo.');
+        } finally {
+            ocultarTypingIndicator();
+            sendBtn.disabled = false;
+            input.disabled = false;
+            input.focus();
+        }
+    }
+    
+    function agregarMensajeUsuario(texto) {
+        const messagesContainer = document.getElementById('chatMessages');
+        if (!messagesContainer) {
+            console.error('Elemento del chat no encontrado: #chatMessages');
+            return;
+        }
+        
+        // Remover mensaje de bienvenida si existe
+        const welcome = messagesContainer.querySelector('.welcome-message');
+        if (welcome) welcome.remove();
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message message-user';
+        messageDiv.innerHTML = `
+            <div class="message-bubble">${escapeHtml(texto)}</div>
+            <div class="message-timestamp">${new Date().toLocaleTimeString('es-PE', {hour: '2-digit', minute: '2-digit'})}</div>
+        `;
+        
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    function agregarMensajeAsistente(texto) {
+        const messagesContainer = document.getElementById('chatMessages');
+        if (!messagesContainer) {
+            console.error('Elemento del chat no encontrado: #chatMessages');
+            return;
+        }
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message message-assistant';
+        
+        // Convertir markdown básico a HTML
+        let htmlTexto = texto
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/`(.*?)`/g, '<code style="background: rgba(0,240,255,0.1); padding: 2px 6px; border-radius: 4px;">$1</code>')
+            .replace(/\n/g, '<br>');   // ←←← aquí estaba el error
+        
+        messageDiv.innerHTML = `
+            <div class="message-bubble">${htmlTexto}</div>
+            <div class="message-timestamp">${new Date().toLocaleTimeString('es-PE', {hour: '2-digit', minute: '2-digit'})}</div>
+        `;
+        
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    function mostrarTypingIndicator() {
+        const messagesContainer = document.getElementById('chatMessages');
+        if (!messagesContainer) {
+            console.error('Elemento del chat no encontrado: #chatMessages');
+            return;
+        }
+        
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message message-assistant';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = `
+            <div class="typing-indicator active">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+            </div>
+        `;
+        
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    function ocultarTypingIndicator() {
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) indicator.remove();
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    window.seleccionarRol = seleccionarRol;
+    window.enviarPreguntaSugerida = enviarPreguntaSugerida;
+    window.enviarMensaje = enviarMensaje;
+
+    // Auto-resize del textarea
+    document.getElementById('chatInput')?.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+    });
     window.addEventListener('load', () => {
+        aplicarAnchosProgreso();
         cargarGraficos();
         buscarGenes();
     });
 </script>
+
+<script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 
 </body>
 </html>
