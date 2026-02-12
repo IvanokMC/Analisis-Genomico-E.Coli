@@ -500,6 +500,124 @@
             align-items: center;
             gap: 10px;
         }
+    </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="layout">
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <i class="fas fa-dna"></i>
+                Navegación
+            </div>
+        </div>
+        
+        <div class="nav-item active" onclick="showSection('dashboard')">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('codones-cds')">
+            <i class="fas fa-dna"></i>
+            <span>Codones CDS</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('codones-genoma')">
+            <i class="fas fa-search"></i>
+            <span>Exploratorio</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('graficos')">
+            <i class="fas fa-chart-line"></i>
+            <span>Gráficos</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('validacion')">
+            <i class="fas fa-check-circle"></i>
+            <span>Validación</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('compactacion')">
+            <i class="fas fa-compress"></i>
+            <span>Compactación</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('genes')">
+            <i class="fas fa-microscope"></i>
+            <span>Genes</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('espacios')">
+            <i class="fas fa-ban"></i>
+            <span>Espacios</span>
+        </div>
+        
+        <div class="nav-item" onclick="showSection('comparativa')">
+            <i class="fas fa-balance-scale"></i>
+            <span>Comparativa</span>
+        </div>
+    </nav>
+
+    <main class="main-content" id="mainContent">
+        <header>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            
+            <div class="header-content">
+                <div class="bacteria-container">
+                    <svg class="bacteria" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="100" cy="100" rx="80" ry="40" fill="url(#grad1)" opacity="0.8"/>
+                        <ellipse cx="100" cy="100" rx="70" ry="35" fill="url(#grad2)"/>
+                        <path d="M 20 100 Q 10 80, 5 60" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <path d="M 20 100 Q 10 120, 5 140" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <path d="M 180 100 Q 190 80, 195 60" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <path d="M 180 100 Q 190 120, 195 140" stroke="var(--primary)" stroke-width="2" fill="none" opacity="0.6"/>
+                        <circle cx="60" cy="90" r="3" fill="var(--secondary)"/>
+                        <circle cx="80" cy="85" r="3" fill="var(--secondary)"/>
+                        <circle cx="120" cy="85" r="3" fill="var(--secondary)"/>
+                        <circle cx="140" cy="90" r="3" fill="var(--secondary)"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--primary);stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:var(--secondary);stop-opacity:0.4" />
+                            </linearGradient>
+                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:var(--primary);stop-opacity:0.9" />
+                                <stop offset="50%" style="stop-color:var(--secondary);stop-opacity:0.7" />
+                                <stop offset="100%" style="stop-color:var(--primary);stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                
+                <h1>🧬 Análisis Genómico</h1>
+                <p class="subtitle"><i>Escherichia coli</i> K-12 MG1655</p>
+                <p class="author">Universidad Nacional San Antonio Abad del Cusco</p>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="section active">
+                <h2 class="section-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard Principal
+                </h2>
+
+                <div class="dashboard">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-ruler-horizontal"></i></div>
+                        <div class="metric-label">Longitud del Genoma</div>
+                        <div class="metric-value">{{ "%.2f"|format(genome_length / 1000000) }} Mb</div>
+                        <div class="metric-subtext">{{ "{:,}".format(genome_length) }} pares de bases</div>
+                    </div>
 
         .alert-box {
             background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.05));
@@ -2160,6 +2278,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <footer>
