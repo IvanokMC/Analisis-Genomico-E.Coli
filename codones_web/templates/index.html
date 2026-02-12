@@ -1619,6 +1619,20 @@
             <div class="particle"></div>
             
             <div class="header-content">
+                <div style="position: relative; z-index: 10; max-width: 600px; margin: 0 auto 20px;">
+                    <label style="display: block; color: var(--secondary); margin-bottom: 10px; font-weight: bold;">
+                        <i class="fas fa-dna"></i> Seleccionar Cepa de E. coli:
+                    </label>
+                    <select id="cepa-selector" onchange="cambiarCepa()" style="width: 100%; padding: 12px; background: var(--bg-card); color: var(--primary); border: 2px solid var(--border); border-radius: 10px; font-size: 1.1em; cursor: pointer;">
+                        <option value="NC_000913.3" {{ 'selected' if cepa_actual == 'NC_000913.3' else '' }}>K-12 MG1655 (Referencia)</option>
+                        <option value="NC_007779.1" {{ 'selected' if cepa_actual == 'NC_007779.1' else '' }}>K-12 W3110</option>
+                        <option value="NC_002695.1" {{ 'selected' if cepa_actual == 'NC_002695.1' else '' }}>O157:H7 EDL933 (Patógena)</option>
+                        <option value="NC_004431.1" {{ 'selected' if cepa_actual == 'NC_004431.1' else '' }}>CFT073 (UPEC)</option>
+                        <option value="CP010816.1" {{ 'selected' if cepa_actual == 'CP010816.1' else '' }}>BL21 (TaKaRa)</option>
+                        <option value="custom" {{ 'selected' if cepa_actual not in ['NC_000913.3', 'NC_007779.1', 'NC_002695.1', 'NC_004431.1', 'CP010816.1'] else '' }}>Código GenBank personalizado</option>
+                    </select>
+                    <input type="text" id="custom-cepa-input" value="{{ cepa_actual if cepa_actual not in ['NC_000913.3', 'NC_007779.1', 'NC_002695.1', 'NC_004431.1', 'CP010816.1'] else '' }}" placeholder="Ej: NC_000913.3" style="display: {{ 'block' if cepa_actual not in ['NC_000913.3', 'NC_007779.1', 'NC_002695.1', 'NC_004431.1', 'CP010816.1'] else 'none' }}; width: 100%; padding: 12px; margin-top: 10px; background: var(--bg-card); color: white; border: 2px solid var(--warning); border-radius: 10px; font-size: 1em;">
+                </div>
                 <div class="bacteria-container">
                     <svg class="bacteria" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <ellipse cx="100" cy="100" rx="80" ry="40" fill="url(#grad1)" opacity="0.8"/>
@@ -2422,7 +2436,7 @@
                     <td>${gen.producto.substring(0, 60)}...</td>
                     <td>${gen.longitud.toLocaleString()} pb</td>
                     <td>
-                        <button class="btn-ver-gen" onclick="mostrarDetallesGen(${gen.id})">
+                        <button class="btn-ver-gen" onclick="mostrarDetallesGen(${gen.index_original})">
                             <i class="fas fa-eye"></i> Ver
                         </button>
                     </td>
@@ -2885,10 +2899,65 @@
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
     });
+    
+    // ========================================
+    // CAMBIO DE CEPA
+    // ========================================
+    async function cambiarCepa() {
+        const selector = document.getElementById('cepa-selector');
+        const customInput = document.getElementById('custom-cepa-input');
+        
+        if (selector.value === 'custom') {
+            customInput.style.display = 'block';
+            customInput.focus();
+            customInput.onchange = async () => {
+                const customId = customInput.value.trim();
+                if (customId) {
+                    await aplicarCambioCepa(customId);
+                }
+            };
+            return;
+        }
+        
+        customInput.style.display = 'none';
+        await aplicarCambioCepa(selector.value);
+    }
+
+    async function aplicarCambioCepa(cepaId) {
+        try {
+            document.body.style.cursor = 'wait';
+            
+            const response = await fetch('/api/cambiar-cepa', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({cepa_id: cepaId})
+            });
+            
+            if (!response.ok) {
+                throw new Error('Cepa no válida');
+            }
+            
+            window.location.href = `/?cepa=${cepaId}`;
+            
+        } catch (error) {
+            alert('Error: ' + error.message + '\n\nVerifica que el código GenBank sea correcto.');
+            document.body.style.cursor = 'default';
+        }
+    }
+    
     window.addEventListener('load', () => {
         aplicarAnchosProgreso();
         cargarGraficos();
         buscarGenes();
+        // Si cepa personalizada, configurar handler del input
+        const selector = document.getElementById('cepa-selector');
+        const customInput = document.getElementById('custom-cepa-input');
+        if (selector?.value === 'custom' && customInput) {
+            customInput.onchange = async () => {
+                const customId = customInput.value.trim();
+                if (customId) await aplicarCambioCepa(customId);
+            };
+        }
     });
 </script>
 

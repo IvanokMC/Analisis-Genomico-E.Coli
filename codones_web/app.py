@@ -13,7 +13,7 @@ app = Flask(__name__)
 Entrez.email = "204800@gmail.com"
 
 # Configuración de Groq AI
-GROQ_API_KEY = "inserte_su_api-key"
+GROQ_API_KEY = "inserte_api_key"
 groq_client = Groq(api_key=GROQ_API_KEY)
 
 # Contexto de conversación para el chatbot
@@ -30,6 +30,9 @@ GENOMES = {
 
 # Caché en memoria para genomas descargados
 GENOME_CACHE = {}
+
+# Variable para la cepa seleccionada (por defecto K-12)
+CEPA_ACTUAL = "NC_000913.3"
 
 def descargar_genoma(genome_id):
     """
@@ -194,7 +197,7 @@ def extraer_genes_detallados(registro):
                 longitud = len(seq_gen)
                 
                 genes.append({
-                    "id": idx,
+                    "index_original": idx,  # NUEVO: Guardar índice original
                     "gen": q.get("gene", [f"Gene_{idx}"])[0],
                     "producto": q.get("product", ["Unknown"])[0],
                     "id_proteina": q.get("protein_id", ["-"])[0],
@@ -208,7 +211,7 @@ def extraer_genes_detallados(registro):
             except:
                 continue
     
-    return sorted(genes, key=lambda x: x['longitud'], reverse=True)
+    return genes  # NO ORDENAR AQUÍ
 
 def analizar_espacios_basura(registro, genes_list):
     """
@@ -424,16 +427,20 @@ def api_sugerencias_preguntas():
 
 @app.route("/")
 def index():
-    """Ruta principal de la aplicación."""
-    registro = descargar_genoma(GENOMES["K-12 MG1655 (Referencia)"])
+    """Página principal con análisis del genoma seleccionado."""
+    global CEPA_ACTUAL
+    cepa_param = request.args.get('cepa', 'NC_000913.3')
+    CEPA_ACTUAL = cepa_param
+
+    registro = descargar_genoma(CEPA_ACTUAL)
     if not registro:
-        return "Error descargando genoma", 500
-        
+        return "Error: No se pudo descargar el genoma", 500
+
     secuencia_genoma = str(registro.seq).upper()
-    
     genes = extraer_genes_detallados(registro)
+    genes_ordenados = sorted(genes, key=lambda x: x['longitud'], reverse=True)
     compactacion = compactacion_genica(registro)
-    espacios = analizar_espacios_basura(registro, genes)
+    espacios = analizar_espacios_basura(registro, genes_ordenados)
     
     # CONTEO DUAL: CDS (correcto) y Genoma Completo (exploratorio)
     conteo_cds = contar_codones_en_cds(registro)
@@ -479,14 +486,15 @@ def index():
     
     return render_template(
         "index.html",
+        cepa_actual=CEPA_ACTUAL,
         genome_length=len(secuencia_genoma),
         gc=contenido_gc(secuencia_genoma),
         num_genes=len(genes),
         gene_density=compactacion["densidad"],
         compactacion=compactacion,
-        gen_mas_grande=genes[0] if genes else None,
-        gen_mas_pequeno=genes[-1] if genes else None,
-        top_genes=genes[:15],
+        gen_mas_grande=genes_ordenados[0] if genes_ordenados else None,
+        gen_mas_pequeno=genes_ordenados[-1] if genes_ordenados else None,
+        top_genes=genes_ordenados[:15],
         
         # CDS (correcto)
         atg_stats=atg_stats,
@@ -509,37 +517,41 @@ def index():
 @app.route("/api/genes")
 def api_genes():
     """API para obtener todos los genes con búsqueda."""
-    registro = descargar_genoma(GENOMES["K-12 MG1655 (Referencia)"])
+    registro = descargar_genoma(CEPA_ACTUAL)
     if not registro:
         return jsonify({"error": "Error loading genome"}), 500
-        
+
     genes = extraer_genes_detallados(registro)
-    
+
     search = request.args.get('search', '').lower()
     if search:
         genes = [g for g in genes if search in g['gen'].lower() or search in g['producto'].lower()]
-    
+
+    # Ordenar por longitud SOLO para display
+    genes_ordenados = sorted(genes, key=lambda x: x['longitud'], reverse=True)
+
     return jsonify({
-        "total": len(genes),
-        "genes": genes[:100]
+        "total": len(genes_ordenados),
+        "genes": genes_ordenados[:100]
     })
 
-@app.route("/api/gen/<int:gen_id>")
-def api_gen_detalle(gen_id):
+@app.route("/api/gen/<int:gen_index>")
+def api_gen_detalle(gen_index):
     """
     API para ver detalles completos de un gen específico.
-    NUEVA FUNCIONALIDAD del Proyecto 1.
+    Usa index_original para encontrar el gen correcto.
     """
-    registro = descargar_genoma(GENOMES["K-12 MG1655 (Referencia)"])
+    registro = descargar_genoma(CEPA_ACTUAL)
     if not registro:
         return jsonify({"error": "Error loading genome"}), 500
-        
+
     genes = extraer_genes_detallados(registro)
-    
-    if gen_id >= len(genes):
+
+    # Buscar gen por index_original
+    gen = next((g for g in genes if g['index_original'] == gen_index), None)
+
+    if not gen:
         return jsonify({"error": "Gene not found"}), 404
-    
-    gen = genes[gen_id]
     secuencia = gen['secuencia']
     
     # Dividir en codones
@@ -581,7 +593,7 @@ def api_gen_detalle(gen_id):
 @app.route("/api/datos-graficos")
 def api_datos_graficos():
     """API para obtener datos para gráficos de Chart.js."""
-    registro = descargar_genoma(GENOMES["K-12 MG1655 (Referencia)"])
+    registro = descargar_genoma(CEPA_ACTUAL)
     if not registro:
         return jsonify({"error": "Error loading genome"}), 500
     
@@ -615,6 +627,24 @@ def api_datos_graficos():
         "comparacion": datos_comparacion,
         "proporciones_stop": codones_stop_cds
     })
+
+@app.route("/api/cambiar-cepa", methods=['POST'])
+def cambiar_cepa():
+    """Cambia la cepa actual del análisis."""
+    global CEPA_ACTUAL
+    data = request.get_json()
+    nueva_cepa = data.get('cepa_id')
+
+    if not nueva_cepa:
+        return jsonify({"error": "cepa_id requerido"}), 400
+
+    # Validar que la cepa existe
+    test = descargar_genoma(nueva_cepa)
+    if not test:
+        return jsonify({"error": "Cepa no válida o no encontrada"}), 404
+
+    CEPA_ACTUAL = nueva_cepa
+    return jsonify({"success": True, "cepa_actual": CEPA_ACTUAL})
 
 @app.route("/api/comparar-genomas")
 def api_comparar_genomas():
