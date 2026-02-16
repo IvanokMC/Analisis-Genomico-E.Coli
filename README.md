@@ -205,9 +205,7 @@ kill $(lsof -t -i:5000)
 ## 👨‍💻 Autores
 
 - Diego Shaid Ninancuro Huarayo
-- Luis Ángel Mogrovejo Ccorimanya
 - George Ivanok Muñoz Castillo
-- Gustavo Pantoja Olave
 
 **Universidad Nacional San Antonio Abad del Cusco**  
 Ingeniería de Sistemas y Computación  
